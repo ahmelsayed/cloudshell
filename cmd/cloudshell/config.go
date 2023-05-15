@@ -3,6 +3,7 @@ package main
 import (
 	"cloudshell/internal/log"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/usvc/go-config"
@@ -10,7 +11,20 @@ import (
 
 var conf = config.Map{
 	"allowed-hostnames": &config.StringSlice{
-		Default:   []string{"localhost"},
+		Default:   func() []string {
+			allowed := []string{"localhost"}
+			if h := os.Getenv("CONTAINER_APP_HOSTNAME"); len(h) > 0 {
+				allowed = append(allowed, h)
+			}
+
+			if domain := os.Getenv("CONTAINER_APP_ENV_DNS_SUFFIX"); len(domain) > 0 {
+				if name := os.Getenv("CONTAINER_APP_NAME"); len(name) > 0 {
+					allowed = append(allowed, fmt.Sprintf("%s.%s", name, domain))
+				}
+			}
+			
+			return allowed
+		}(),
 		Usage:     "comma-delimited list of hostnames that are allowed to connect to the websocket",
 		Shorthand: "H",
 	},

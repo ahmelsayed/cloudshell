@@ -7,6 +7,7 @@
     maximizeWin: true,
     screenReaderMode: true,
     cols: 128,
+    fontSize: 25,
   });
   terminal.open(document.getElementById("terminal"));
   var protocol = (location.protocol === "https:") ? "wss://" : "ws://";

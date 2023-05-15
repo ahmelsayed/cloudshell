@@ -23,7 +23,7 @@ func getConnectionUpgrader(
 					return true
 				}
 			}
-			logger.Warnf("failed to find '%s' in the list of allowed hostnames ('%s')", requesterHostname)
+			logger.Warnf("failed to find '%s' in the list of allowed hostnames ('%v')", requesterHostname, allowedHostnames)
 			return false
 		},
 		HandshakeTimeout: 0,
